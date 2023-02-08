@@ -8,7 +8,7 @@ export class Canvas extends HTMLCanvasElement {
 
 
     constructor(){
-        
+         
         super() 
         console.log(this.innerHTML, this.outerHTML, this)
 

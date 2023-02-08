@@ -1,5 +1,6 @@
 {
-  "dependencies": {
-    "typescript": "^4.9.5"
-  }
+    "scripts": {
+        "browsersync": "npx browser-sync start --server 'dist' --files 'dist'",
+        "watch": "npx tsc -w"
+    }
 }
