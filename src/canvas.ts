@@ -1,22 +1,27 @@
 import type { Obj } from "./object"
 
-export class Canvas extends HTMLCanvasElement {
+export class Canvas  {
 
+    
+    reference: HTMLCanvasElement
     context: CanvasRenderingContext2D
-    window: Window
     objects: Obj[]
+    width: number
+    height: number
 
 
-    constructor(){
+    constructor(private window: Window, private querySelect, width = 100, height = 100){
          
-        super() 
-        console.log(this.innerHTML, this.outerHTML, this)
+        this.reference = this.window.document.querySelector(querySelect)
 
+        this.context = this.reference.getContext('2d')
+        
+        this.width = width
+        this.height = height
+
+        this.reference.setAttribute('width', width.toString())
+        this.reference.setAttribute('height', height.toString())
             
-        this.context = this.getContext('2d')
-        this.window = this.window
-
-
         this.objects = []
     
     }
@@ -24,22 +29,22 @@ export class Canvas extends HTMLCanvasElement {
 
     setSize(width, height){
     
-        this.width = width
-        this.height = height
+        this.reference.width = width
+        this.reference.height = height
     
     }
 
     
     getWidth(){
     
-        return this.width
+        return this.reference.width
     
     }
 
 
     getHeight(){
     
-        return this.height
+        return this.reference.height
     
     }
     
@@ -54,8 +59,8 @@ export class Canvas extends HTMLCanvasElement {
     
         setInterval(()=>{
         
-            callback.bind(this.window)()
             this.context.clearRect(0, 0, this.width, this.height)
+            callback()
             this.objects.forEach((obj)=> obj.draw())
         
         }, (getInMilliseconds(1, 'second') / 60))
@@ -72,4 +77,3 @@ function getInMilliseconds(number, format){
     }
 }
 
-customElements.define("canvas-window", Canvas, {extends: 'canvas'});

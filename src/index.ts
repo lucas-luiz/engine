@@ -1,36 +1,45 @@
-import {Canvas} from './canvas'
-import {Player} from './player'
+import { Canvas } from './canvas'
+import { Keyboard } from './keyboard'
+import { Player } from './player'
 
 
 //INIT
 
 //screen setup
-const canvas = new Canvas()
-canvas.width = 300
-canvas.height = 200
+const canvas = new Canvas(window, '#canvas', 200, 200)
+
+//keyboard setup
+const keys =  new Keyboard(window)
 
 //player setup
 const gridScalePx = 30
 const player = new Player(canvas, {
-    width: gridScalePx,
-     height: gridScalePx,
-    position: [0,0],
+    w: gridScalePx,
+    h: gridScalePx,
+    x: 10,
+    y: 10,
     color: 'white'
 })
 
-console.log(canvas, player) 
-
-
-
 //LOOP   
 canvas.loop(() => {
-    console.log('sdf')
-    if(player.x > canvas.width + player.w)
-        player.x = 0
 
-    if(player.y > canvas.height + player.h)
-        player.y = 0
+    if (player.x > canvas.width )
+        player.x = -player.w
+    else if (player.x < -player.w)
+        player.x = canvas.width 
 
-    player.setXSpeed(1)
-    player.setYSpeed(1)    
+    if (player.y > canvas.height)
+        player.y = -player.h
+    else if (player.y < -player.h)
+        player.y = canvas.height 
+
+    if(keys.check('W'))
+        player.y--
+    if(keys.check('A'))
+        player.x--
+    if(keys.check('S'))
+        player.y++
+    if(keys.check('D'))
+        player.x++
 })

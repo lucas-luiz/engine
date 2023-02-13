@@ -1,71 +1,37 @@
 import type { Canvas } from "./canvas"
-import type { ObjectRenderOptions, Position2D } from "../types/object"
+import type { ObjectRenderOptions } from "../types/object"
 
 export class Obj {
 
     public w
     public h
-    private position : Position2D 
 
     public x : number
     public y : number 
     private color
     private canvasReference : Canvas
-    private xSpeed
-    private ySpeed
+    public xSpeed
+    public ySpeed
 
     constructor(canvasEntity: Canvas, objectRenderOptions: ObjectRenderOptions) {
 
         canvasEntity.addObject(this)
 
-        this.w = objectRenderOptions.width
+        this.w = objectRenderOptions.w
 
-        this.h = objectRenderOptions.height
+        this.h = objectRenderOptions.h
 
         this.x = objectRenderOptions.x
 
         this.y = objectRenderOptions.y
 
+        this.xSpeed = 0
+
+        this.ySpeed = 0
+
         this.color = objectRenderOptions.color
 
         this.canvasReference = canvasEntity
-    }
-
-
-    getPosition(): Position2D{
-
-        return {
-            x: this.x,
-            y: this.y
-        }
-
-    }
-
-
-    setWidth(w): void {
-
-        this.w = w
-
-    }
-
-
-    setHeight(h): void {
-
-        this.h = h
-
-    }
-
-
-    setXSpeed(speed): void {
-
-        this.xSpeed = speed 
-
-    }
-
-
-    setYSpeed(speed): void {
-
-        this.ySpeed = speed
 
     }
 
@@ -75,11 +41,9 @@ export class Obj {
         const lastX = this.x
         const lastY = this.y
 
-        this.position = {
-            x : lastX + this.xSpeed,
-            y : lastY + this.ySpeed
-        }
-
+        this.x = lastX + this.xSpeed
+        this.y = lastY + this.ySpeed 
+ 
     }
 
 
@@ -92,7 +56,6 @@ export class Obj {
         ctx.beginPath();
         ctx.fillStyle = 'white'
         ctx.fillRect(this.x, this.y , this.w, this.h)
-        ctx.closePath();
-
+        ctx.closePath();  
     }
 }
