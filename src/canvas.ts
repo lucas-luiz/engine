@@ -61,11 +61,29 @@ export class Canvas  {
         
             this.context.clearRect(0, 0, this.width, this.height)
             callback()
-            this.objects.forEach((obj)=> obj.draw())
+
+            handleCollisions(this.objects)
+            drawObjects(this.objects)
+            
         
         }, (getInMilliseconds(1, 'second') / 60))
+
+        function handleCollisions(objs){ 
+            //sort by position
+            for(const obj of objs){
+                if(obj.isTranslucid === false){
+                    //logica de collision e reposition
+                }
+            }
+        }
+    
+        function drawObjects(objs){
+            objs.forEach((obj)=> obj.draw())
+        }
         
     }
+
+    
 }
 
 function getInMilliseconds(number, format){

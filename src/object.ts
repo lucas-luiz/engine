@@ -8,11 +8,16 @@ export class Obj {
 
     public x : number
     public y : number 
-    private color
-    private canvasReference : Canvas
-    public xSpeed
-    public ySpeed
+    
+    //public xSpeed
+    //public ySpeed
 
+    public isTranslucid 
+    
+    private color
+    
+    private canvasReference : Canvas
+    
     constructor(canvasEntity: Canvas, objectRenderOptions: ObjectRenderOptions) {
 
         canvasEntity.addObject(this)
@@ -25,9 +30,11 @@ export class Obj {
 
         this.y = objectRenderOptions.y
 
-        this.xSpeed = 0
+        this.isTranslucid = false
 
-        this.ySpeed = 0
+        //this.xSpeed = 0
+
+        //this.ySpeed = 0
 
         this.color = objectRenderOptions.color
 
@@ -36,7 +43,7 @@ export class Obj {
     }
 
 
-    private updatePosition(): void {
+    /* private updatePosition(): void {
         
         const lastX = this.x
         const lastY = this.y
@@ -44,12 +51,12 @@ export class Obj {
         this.x = lastX + this.xSpeed
         this.y = lastY + this.ySpeed 
  
-    }
+    } */
 
 
     draw(): void {
 
-        this.updatePosition()
+        //this.updatePosition()
 
         const ctx: CanvasRenderingContext2D = this.canvasReference.context
 
