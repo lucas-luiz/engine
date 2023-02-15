@@ -13,8 +13,10 @@ export class Obj {
     //public ySpeed
 
     public isTranslucid 
+
+    public weight
     
-    private color
+    public color
     
     private canvasReference : Canvas
     
@@ -61,7 +63,7 @@ export class Obj {
         const ctx: CanvasRenderingContext2D = this.canvasReference.context
 
         ctx.beginPath();
-        ctx.fillStyle = 'white'
+        ctx.fillStyle = this.color
         ctx.fillRect(this.x, this.y , this.w, this.h)
         ctx.closePath();  
     }
