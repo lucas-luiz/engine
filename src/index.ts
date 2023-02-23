@@ -13,7 +13,7 @@ const canvas = new Canvas(window, '#canvas', 300, 300)
 const keys = new Keyboard(window)
 
 //player setup
-const gridScalePx = 30
+const gridScalePx = 60
 const player = new Player(canvas, {
     w: gridScalePx,
     h: gridScalePx,
@@ -39,6 +39,7 @@ const obstacle2 = new Obj(canvas, {
     y: (450 - 50)/2 
 })
 
+const interval = setInterval(()=>{console.log(obstacle2.x, obstacle2.y)},1000)
 
 //LOOP   
 canvas.loop(() => {
@@ -52,6 +53,7 @@ canvas.loop(() => {
     if (keys.check('D') || keys.check('ARROWRIGHT'))
         player.x++
 
+    
     if (player.x > canvas.width)
         player.x = -player.w
     else if (player.x < -player.w)

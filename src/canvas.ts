@@ -78,9 +78,9 @@ export class Canvas {
                 if (targetObj.isTranslucid === false) {
 
                     const possibleCollidedObjects = filterPossibleCollisions(targetObj, objs)
-                    for(const obj of possibleCollidedObjects){
-                        
-                        if(targetObj != obj && isColliding(targetObj, obj)){
+                    for (const obj of possibleCollidedObjects) {
+
+                        if (targetObj != obj && isColliding(targetObj, obj)) {
                             applyCollisionRules(targetObj, obj)
                         }
                     }
@@ -91,15 +91,15 @@ export class Canvas {
 
         }
 
-        
-        function filterPossibleCollisions(target: Obj, objs: Obj[]): Obj[]{
+
+        function filterPossibleCollisions(target: Obj, objs: Obj[]): Obj[] {
 
             return objs
 
         }
 
 
-        function isColliding(objA: Obj, objB: Obj): boolean{
+        function isColliding(objA: Obj, objB: Obj): boolean {
 
             if (
                 objA.x + objA.w >= objB.x &&
@@ -114,16 +114,39 @@ export class Canvas {
         }
 
 
-        function applyCollisionRules(objA: Obj, objB: Obj): void{
+        function applyCollisionRules(objA: Obj, objB: Obj): void {
 
             //compare weights
-            objA.color = 'red'
-            objB.color = 'red'
+            const [havierObj, lighterObj] = objA.weight > objB.weight ? [objA, objB] : [objB, objA]
+
+            const diffX = lighterObj.getCenterX() - havierObj.getCenterX()
+            const diffY = lighterObj.getCenterY() - havierObj.getCenterY()
+
+            //colisao horizontal
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                //handle pra esquerda
+                if (diffX < 0) {
+                    lighterObj.x = havierObj.x - lighterObj.w
+                }
+                //handle pra direita
+                else{
+                    lighterObj.x = havierObj.x + havierObj.w 
+                }
+            }else{
+                //handle pra cima
+                if (diffY < 0) {
+                    lighterObj.y = havierObj.y - lighterObj.h
+                }
+                //handle pra baixo
+                else{
+                    lighterObj.y = havierObj.y + havierObj.w
+                }
+            }
 
         }
 
 
-        function drawObjects(objs): void{
+        function drawObjects(objs): void {
 
             objs.forEach((obj) => obj.draw())
 
