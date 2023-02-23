@@ -20,6 +20,8 @@ export class Obj {
 
     private canvasReference: Canvas
 
+    private objectsCollidiing: Obj[]
+
     constructor(canvasEntity: Canvas, objectRenderOptions: ObjectRenderOptions) {
 
         canvasEntity.addObject(this)
@@ -48,6 +50,21 @@ export class Obj {
     }
 
 
+    public isColliding(objB: Obj): boolean {
+
+        if (
+            this.x + this.w >= objB.x &&
+            this.x <= objB.x + objB.w &&
+            this.y + this.h >= objB.y &&
+            this.y <= objB.y + objB.h
+        )
+            return true
+        else
+            return false
+
+    }
+
+
     public getCenterX(): number {
 
         return this.x + (this.w / 2)
@@ -66,7 +83,7 @@ export class Obj {
 
         //this.updatePosition()
 
-        
+
 
         const ctx: CanvasRenderingContext2D = this.canvasReference.context
 

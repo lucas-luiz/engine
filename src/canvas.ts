@@ -9,6 +9,9 @@ export class Canvas {
     width: number
     height: number
 
+    private currLoopCallback
+    private currLoopInterval
+
 
     constructor(private window: Window, private querySelect, width = 100, height = 100) {
 
@@ -55,16 +58,22 @@ export class Canvas {
 
     }
 
+    sleep(seconds: number){
+        
+    }
+
     loop(callback) {
 
         setInterval(() => {
 
             this.context.clearRect(0, 0, this.width, this.height)
-            callback()
 
             handleCollisions(this.objects)
 
             drawObjects(this.objects)
+
+            callback()
+
 
         }, (getInMilliseconds(1, 'second') / 60))
 
@@ -129,16 +138,16 @@ export class Canvas {
                     lighterObj.x = havierObj.x - lighterObj.w
                 }
                 //handle pra direita
-                else{
-                    lighterObj.x = havierObj.x + havierObj.w 
+                else {
+                    lighterObj.x = havierObj.x + havierObj.w
                 }
-            }else{
+            } else {
                 //handle pra cima
                 if (diffY < 0) {
                     lighterObj.y = havierObj.y - lighterObj.h
                 }
                 //handle pra baixo
-                else{
+                else {
                     lighterObj.y = havierObj.y + havierObj.w
                 }
             }
