@@ -43,7 +43,7 @@ export class Obj {
 
         //this.ySpeed = 0
 
-        this.color = objectRenderOptions.color
+        this.color = objectRenderOptions.color ?? 'black'
 
         this.canvasReference = canvasEntity
 

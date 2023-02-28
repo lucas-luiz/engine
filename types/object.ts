@@ -3,5 +3,5 @@ export interface ObjectRenderOptions {
     h: number;
     x: number;
     y: number;
-    color: string;
+    color?: string;
 }

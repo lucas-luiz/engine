@@ -8,9 +8,11 @@ export class Canvas {
     objects: Obj[]
     width: number
     height: number
+    timeoutRef
 
     private currLoopCallback
     private currLoopInterval
+    callback: any
 
 
     constructor(private window: Window, private querySelect, width = 100, height = 100) {
@@ -58,108 +60,117 @@ export class Canvas {
 
     }
 
-    sleep(seconds: number){
-        
+    sleep(milli: number, sleepCallback) {
+        clearTimeout(this.timeoutRef)
+        setTimeout(() => {
+            sleepCallback()
+            this.loop(this.callback)
+        }, milli)
     }
 
     loop(callback) {
 
-        setInterval(() => {
+        this.timeoutRef = setTimeout(() => {
 
-            this.context.clearRect(0, 0, this.width, this.height)
-
-            handleCollisions(this.objects)
-
-            drawObjects(this.objects)
-
-            callback()
-
+            this.loop(callback)
 
         }, (getInMilliseconds(1, 'second') / 60))
 
+        this.callback = callback
+        
+        
+        this.context.clearRect(0, 0, this.width, this.height)
+        
+        this.handleCollisions(this.objects)
+        
+        this.drawObjects(this.objects)
+        
+        this.callback()
 
-        function handleCollisions(objs) {
 
-            const alreadyCollidedMap = new Map<Obj, Obj>()
+    }
 
-            for (const targetObj of objs) {
+    //timeout
+    handleCollisions(objs) {
 
-                if (targetObj.isTranslucid === false) {
+        const alreadyCollidedMap = new Map<Obj, Obj>()
 
-                    const possibleCollidedObjects = filterPossibleCollisions(targetObj, objs)
-                    for (const obj of possibleCollidedObjects) {
+        for (const targetObj of objs) {
 
-                        if (targetObj != obj && isColliding(targetObj, obj)) {
-                            applyCollisionRules(targetObj, obj)
-                        }
+            if (targetObj.isTranslucid === false) {
+
+                const possibleCollidedObjects = this.filterPossibleCollisions(targetObj, objs)
+                for (const obj of possibleCollidedObjects) {
+
+                    if (targetObj != obj && this.isColliding(targetObj, obj)) {
+                        this.applyCollisionRules(targetObj, obj)
                     }
-
                 }
 
             }
 
         }
 
-
-        function filterPossibleCollisions(target: Obj, objs: Obj[]): Obj[] {
-
-            return objs
-
-        }
+    }
 
 
-        function isColliding(objA: Obj, objB: Obj): boolean {
+    filterPossibleCollisions(target: Obj, objs: Obj[]): Obj[] {
 
-            if (
-                objA.x + objA.w >= objB.x &&
-                objA.x <= objB.x + objB.w &&
-                objA.y + objA.h >= objB.y &&
-                objA.y <= objB.y + objB.h
-            )
-                return true
-            else
-                return false
+        return objs
 
-        }
+    }
 
 
-        function applyCollisionRules(objA: Obj, objB: Obj): void {
+    isColliding(objA: Obj, objB: Obj): boolean {
 
-            //compare weights
-            const [havierObj, lighterObj] = objA.weight > objB.weight ? [objA, objB] : [objB, objA]
+        if (
+            objA.x + objA.w >= objB.x &&
+            objA.x <= objB.x + objB.w &&
+            objA.y + objA.h >= objB.y &&
+            objA.y <= objB.y + objB.h
+        )
+            return true
+        else
+            return false
 
-            const diffX = lighterObj.getCenterX() - havierObj.getCenterX()
-            const diffY = lighterObj.getCenterY() - havierObj.getCenterY()
+    }
 
-            //colisao horizontal
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                //handle pra esquerda
-                if (diffX < 0) {
-                    lighterObj.x = havierObj.x - lighterObj.w
-                }
-                //handle pra direita
-                else {
-                    lighterObj.x = havierObj.x + havierObj.w
-                }
-            } else {
-                //handle pra cima
-                if (diffY < 0) {
-                    lighterObj.y = havierObj.y - lighterObj.h
-                }
-                //handle pra baixo
-                else {
-                    lighterObj.y = havierObj.y + havierObj.w
-                }
+
+    applyCollisionRules(objA: Obj, objB: Obj): void {
+
+        //compare weights
+        const [havierObj, lighterObj] = objA.weight > objB.weight ? [objA, objB] : [objB, objA]
+
+        const diffX = lighterObj.getCenterX() - havierObj.getCenterX()
+        const diffY = lighterObj.getCenterY() - havierObj.getCenterY()
+
+        //colisao horizontal
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+            //handle pra esquerda
+            if (diffX < 0) {
+                lighterObj.x = havierObj.x - lighterObj.w
             }
-
+            //handle pra direita
+            else {
+                lighterObj.x = havierObj.x + havierObj.w
+            }
+        } else {
+            //handle pra cima
+            if (diffY < 0) {
+                lighterObj.y = havierObj.y - lighterObj.h
+            }
+            //handle pra baixo
+            else {
+                lighterObj.y = havierObj.y + havierObj.w
+            }
         }
 
+    }
 
-        function drawObjects(objs): void {
 
-            objs.forEach((obj) => obj.draw())
+    drawObjects(objs): void {
 
-        }
+        objs.forEach((obj) => obj.draw())
 
     }
 
